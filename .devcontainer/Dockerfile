@@ -2,7 +2,7 @@
 
 # [Choice] Debian version: bullseye, buster, stretch
 #ARG VARIANT="buster"
-#FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu
 
 # Install PHP and server apps.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
