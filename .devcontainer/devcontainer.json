@@ -1,9 +1,6 @@
 {
-    "name": "Debian",
-	"build": {
-		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Debian version: bullseye, buster, stretch
-		"args": { "VARIANT": "buster" }
-	},
+    "build": {
+	"dockerfile": "Dockerfile"
+    },
     "forwardPorts": [8080]
 }
