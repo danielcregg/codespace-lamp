@@ -1,41 +1,43 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-	"name": "Ubuntu",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// The name of the container configuration.
+	"name": "Ubuntu", 
+	// This installs an Ubuntu 20.04 image with the specified packages. Jammy is the codename for Ubuntu 22.04.
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
-	"hostRequirements": {
-		"cpus": 4
-	  },
-	  "waitFor": "onCreateCommand",
-	  "updateContentCommand": "sudo apt-get update && sudo apt-get install -y apache2 mysql-server php-mysql",
-	  "postCreateCommand": "sudo a2enmod rewrite && sudo service apache2 restart && sudo service mysql restart && echo 'Listen 8080' >> /etc/apache2/ports.conf && a2enmod rewrite",
-	  "postAttachCommand": {
-		"server": "npm start"
-	  },
-	  "customizations": {
-		"codespaces": {
-		  "openFiles": [
-			"index.html"
-		  ]
-		}
-	  },
-	  "portsAttributes": {
-		"80": {
-		  "label": "Application",
-		  "onAutoForward": "openPreview"
-		}
-	  },
-	  "forwardPorts": [80],
-	
+	"waitFor": "onCreateCommand",
+	// This command will be run when the container is created. It installs the LAMP stack.
+	"updateContentCommand": "sudo apt-get update && sudo apt-get install -y apache2 mysql-server php-mysql",
 	// Use 'postCreateCommand' to run commands after the container is created.
-	//"postCreateCommand": "sudo apt-get update && sudo apt-get install -y apache2 mysql-server php-mysql && sudo a2enmod rewrite && sudo service apache2 restart && sudo service mysql restart && echo "Listen 8080" >> /etc/apache2/ports.conf && a2enmod rewrite",
-
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
+	//"postCreateCommand": "sudo a2enmod rewrite && sudo service apache2 restart && sudo service mysql restart && echo 'Listen 8080' >> /etc/apache2/ports.conf && sudo sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/workspaces\/$RepositoryName\/public/g' /etc/apache2/sites-available/000-default.conf",
+	"postCreateCommand": [
+		"sudo a2enmod rewrite",
+		"sudo service apache2 restart",
+		"sudo service mysql restart",
+		"echo 'Listen 8080' >> /etc/apache2/ports.conf",
+		"sudo sed -i 's/DocumentRoot \\/var\\/www\\/html/DocumentRoot \\/workspaces\\/$RepositoryName\\/public/g' /etc/apache2/sites-available/000-default.conf",
+		//"sudo sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/'"$RepositoryName"'/public|g' /etc/apache2/sites-available/000-default.conf",
+	],
+	"postAttachCommand": {
+		"server": "sudo service apache2 restart"
+	},
+	// Configure tool-specific properties. For more information, visit: https://aka.ms/vscode-remote/devcontainer.json
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"index.html"
+			]
+		}
+	},
+	"portsAttributes": {
+		"80": {
+			"label": "Website",
+			"onAutoForward": "openPreview"
+		}
+	},
+	// "forwardPorts": [
+	// 	80
+	// ],
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "root"
-		
 }
