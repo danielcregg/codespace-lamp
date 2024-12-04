@@ -1,44 +1,28 @@
 {
-    "name": "LAMP Codespace",
-    "image": "mcr.microsoft.com/devcontainers/base:jammy",
-    "waitFor": "onCreateCommand",
-    
-    "updateContentCommand": "sudo apt-get update && sudo apt-get install -y apache2 mysql-server php libapache2-mod-php php-mysql",
-    
-    "postCreateCommand": [
-        "sudo a2enmod rewrite",
-        "sudo mkdir -p /workspaces/${localWorkspaceFolderBasename}/public",
-        "sudo chown -R www-data:www-data /workspaces/${localWorkspaceFolderBasename}/public",
-        "sudo chmod -R 755 /workspaces/${localWorkspaceFolderBasename}/public",
-        "echo 'Listen 8080' | sudo tee /etc/apache2/ports.conf",
-        "echo '<VirtualHost *:8080>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /workspaces/${localWorkspaceFolderBasename}/public\n    <Directory /workspaces/${localWorkspaceFolderBasename}/public>\n        Options Indexes FollowSymLinks\n        AllowOverride All\n        Require all granted\n    </Directory>\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>' | sudo tee /etc/apache2/sites-available/000-default.conf",
-        "sudo /etc/init.d/apache2 start",
-        "sudo /etc/init.d/mysql start"
-    ],
-    
-    "postAttachCommand": {
-        "server": "sudo /etc/init.d/apache2 start && sudo /etc/init.d/mysql start"
-    },
-    
+    "name": "Ubuntu LAMP Server",
+    "dockerFile": "Dockerfile",
+    "forwardPorts": [80, 3306],
+    "postCreateCommand": "sudo service apache2 start && sudo service mysql start",
     "customizations": {
         "vscode": {
             "extensions": [
-                "ms-vscode.live-server",
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
                 "bmewburn.vscode-intelephense-client",
-                "xdebug.php-debug"
-            ]
+                "xdebug.php-debug",
+                "mhutchie.git-graph",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "php.validate.executablePath": "/usr/bin/php"
+            }
         }
     },
-    
-    "portsAttributes": {
-        "8080": {
-            "label": "Web Server",
-            "onAutoForward": "openPreview"
+    "remoteUser": "vscode",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "username": "vscode",
+            "userUid": "1000",
+            "userGid": "1000"
         }
-    },
-    
-    "forwardPorts": [8080],
-    "remoteUser": "root"
+    }
 }
