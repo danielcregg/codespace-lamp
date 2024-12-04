@@ -9,14 +9,13 @@
 	// This command will be run when the container is created. It installs the LAMP stack.
 	"updateContentCommand": "sudo apt-get update && sudo apt-get install -y apache2 mysql-server php-mysql",
 	// Use 'postCreateCommand' to run commands after the container is created.
-	//"postCreateCommand": "sudo a2enmod rewrite && sudo service apache2 restart && sudo service mysql restart && echo 'Listen 8080' >> /etc/apache2/ports.conf && sudo sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/workspaces\/$RepositoryName\/public/g' /etc/apache2/sites-available/000-default.conf",
 	"postCreateCommand": [
 		"sudo a2enmod rewrite",
 		"sudo mkdir -p /workspaces/codespaces-lamp/public",
 		"sudo chown -R www-data:www-data /workspaces/codespaces-lamp/public",
 		"sudo chmod -R 755 /workspaces/codespaces-lamp/public",
 		"sudo sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/codespaces-lamp/public|' /etc/apache2/sites-available/000-default.conf",
-		 "echo 'Listen 8080' | sudo tee /etc/apache2/ports.conf",
+		"echo 'Listen 8080' | sudo tee /etc/apache2/ports.conf",
 		"sudo service apache2 restart",
 		"sudo service mysql restart"
 	],
