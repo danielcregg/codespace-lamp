@@ -25,7 +25,10 @@ RUN a2enmod rewrite
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Update the default Apache site configuration
-RUN sed -i 's|/var/www/html|/workspaces/$(basename ${PWD})/public|g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/codespaces-lamp/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Ensure the public directory exists
+RUN mkdir -p /workspaces/codespaces-lamp/public
 
 # Create the public directory and set permissions
 RUN mkdir -p /workspaces/$(basename ${PWD})/public

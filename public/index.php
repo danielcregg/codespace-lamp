@@ -49,7 +49,7 @@
             <ul>
                 <li>Apache Web Server</li>
                 <li>MySQL Database</li>
-                <li>PHP</li>
+                <li>PHP <?php echo phpversion(); ?></li>
             </ul>
             <p>Start building your web application by modifying files in the <code>public</code> directory.</p>
         </div>
