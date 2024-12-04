@@ -2,7 +2,7 @@
     "name": "Ubuntu LAMP Server",
     "dockerFile": "Dockerfile",
     "forwardPorts": [80, 3306],
-    "postCreateCommand": "sudo service apache2 start && sudo service mysql start",
+    "postCreateCommand": "sudo chown -R www-data:www-data /workspaces/codespaces-lamp/public && sudo chmod -R 755 /workspaces/codespaces-lamp/public && sudo service apache2 start && sudo service mysql start",
     "customizations": {
         "vscode": {
             "extensions": [

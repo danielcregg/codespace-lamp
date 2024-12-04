@@ -27,12 +27,17 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 # Update the default Apache site configuration
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/codespaces-lamp/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Ensure the public directory exists
-RUN mkdir -p /workspaces/codespaces-lamp/public
+# Configure directory permissions in Apache
+RUN echo '<Directory /workspaces/codespaces-lamp/public>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' >> /etc/apache2/apache2.conf
 
 # Create the public directory and set permissions
-RUN mkdir -p /workspaces/$(basename ${PWD})/public
-RUN chown -R www-data:www-data /workspaces/$(basename ${PWD})/public
+RUN mkdir -p /workspaces/codespaces-lamp/public
+RUN chown -R www-data:www-data /workspaces/codespaces-lamp/public
+RUN chmod -R 755 /workspaces/codespaces-lamp/public
 
 # Expose ports
 EXPOSE 80
