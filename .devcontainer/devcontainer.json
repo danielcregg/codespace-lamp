@@ -32,7 +32,9 @@
 		},
 		"vscode": {
 			"extensions": [
-				"ms-vscode.live-server"
+				"ms-vscode.live-server",
+				"GitHub.copilot",
+				"GitHub.copilot-chat"
 			]
 		}
 	},
