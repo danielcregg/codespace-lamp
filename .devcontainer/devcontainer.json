@@ -12,11 +12,13 @@
 	//"postCreateCommand": "sudo a2enmod rewrite && sudo service apache2 restart && sudo service mysql restart && echo 'Listen 8080' >> /etc/apache2/ports.conf && sudo sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/workspaces\/$RepositoryName\/public/g' /etc/apache2/sites-available/000-default.conf",
 	"postCreateCommand": [
 		"sudo a2enmod rewrite",
+		"sudo mkdir -p /workspaces/codespaces-lamp/public",
+		"sudo chown -R www-data:www-data /workspaces/codespaces-lamp/public",
+		"sudo chmod -R 755 /workspaces/codespaces-lamp/public",
+		"sudo sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/codespaces-lamp/public|' /etc/apache2/sites-available/000-default.conf",
+		 "echo 'Listen 8080' | sudo tee /etc/apache2/ports.conf",
 		"sudo service apache2 restart",
-		"sudo service mysql restart",
-		"echo 'Listen 8080' >> /etc/apache2/ports.conf",
-		"sudo sed -i 's/DocumentRoot \\/var\\/www\\/html/DocumentRoot \\/workspaces\\/$RepositoryName\\/public/g' /etc/apache2/sites-available/000-default.conf",
-		//"sudo sed -i 's|DocumentRoot /var/www/html|DocumentRoot /workspaces/'"$RepositoryName"'/public|g' /etc/apache2/sites-available/000-default.conf",
+		"sudo service mysql restart"
 	],
 	"postAttachCommand": {
 		"server": "sudo service apache2 restart"
@@ -27,17 +29,22 @@
 			"openFiles": [
 				"index.html"
 			]
+		},
+		"vscode": {
+			"extensions": [
+				"ms-vscode.live-server"
+			]
 		}
 	},
 	"portsAttributes": {
-		"80": {
+		 "8080": {
 			"label": "Website",
 			"onAutoForward": "openPreview"
 		}
 	},
-	// "forwardPorts": [
-	// 	80
-	// ],
+	"forwardPorts": [
+		8080
+	],
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "root"
 }
